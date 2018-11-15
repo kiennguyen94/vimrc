@@ -1,7 +1,7 @@
-:set ignorecase
-:set smartcase
-:set hlsearch
-:set mouse=
+set ignorecase
+set smartcase
+set hlsearch
+set mouse=
 syntax on
 colorscheme desert
 vnoremap // y/<C-R>"<CR>
@@ -12,6 +12,7 @@ set softtabstop=4
 set shiftwidth=4        " number of spaces to use for auto indent
 set autoindent          " copy indent from current line when starting a new line
 set textwidth=130       " break lines when line length increases
+set hidden
 " make backspaces more powerfull
 " set backspace=indent,eol,start
 "
