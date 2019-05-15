@@ -1,3 +1,4 @@
+set encoding=utf-8
 source $VIMRUNTIME/vimrc_example.vim
 set ignorecase
 set smartcase
@@ -61,13 +62,14 @@ call vundle#begin()
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'Valloric/YouCompleteMe'
-Plugin 'flazz/vim-colorschemes'
+" Plugin 'flazz/vim-colorschemes'
 Plugin 'vim-airline/vim-airline' 
 Plugin 'bling/vim-bufferline'
 Plugin 'ctrlpvim/ctrlp.vim'
-Plugin 'dracula/vim'
 Plugin 'drewtempelmeyer/palenight.vim'
 Plugin 'jiangmiao/auto-pairs'
+Plugin 'severin-lemaignan/vim-minimap'
+
 call vundle#end()            " required
 " End vundle
 filetype plugin indent on    " required
@@ -93,6 +95,9 @@ let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
 
+" let g:ycm_server_keep_logfiles = 1
+" let g:ycm_server_log_level = 'debug'
+let g:ycm_semantic_completion_toggle = '<c-q>'
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
 nmap <leader>3 <Plug>AirlineSelectTab3
@@ -106,4 +111,8 @@ nmap <leader>9 <Plug>AirlineSelectTab9
 set number relativenumber
 set nu rnu
 colorscheme palenight
-" set timeoutlen=1000 ttimeoutlen=0
+set cursorline
+set timeoutlen=1000 ttimeoutlen=0
+setlocal foldmethod=syntax
+set sidescroll=1
+"
