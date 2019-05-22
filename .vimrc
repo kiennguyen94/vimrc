@@ -79,6 +79,7 @@ let g:airline#extensions#tabline#enabled = 1
 
 let mapleader=" "
 nmap <Leader>b :CtrlPBuffer<CR>
+nmap <Leader>l : CtrlPLine<CR>
 let g:ctrlp_map = '<c-k>'
 let g:ctrlp_extensions = ['buffertag', 'tag', 'line', 'dir']
 
@@ -113,6 +114,6 @@ set nu rnu
 colorscheme palenight
 set cursorline
 set timeoutlen=1000 ttimeoutlen=0
-setlocal foldmethod=syntax
+" set foldmethod=syntax
 set sidescroll=1
 "
