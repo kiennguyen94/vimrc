@@ -69,6 +69,9 @@ Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'drewtempelmeyer/palenight.vim'
 Plugin 'jiangmiao/auto-pairs'
 Plugin 'severin-lemaignan/vim-minimap'
+Plugin 'jpalardy/vim-slime.git'
+Plugin 'ekalinin/Dockerfile.vim'
+" Plugin 'szymonmaszke/vimpyter'
 
 call vundle#end()            " required
 " End vundle
@@ -116,4 +119,9 @@ set cursorline
 set timeoutlen=1000 ttimeoutlen=0
 " set foldmethod=syntax
 set sidescroll=1
-"
+let g:slime_target = "vimterminal"
+" let g:slime_python_ipython
+let g:slime_python_ipython = 1
+" let g:slime_paste_file = "$HOME/.slime_paste"
+" " guibg=lightgrey guifg=blue
+hi Terminal ctermbg=Black ctermfg=White
