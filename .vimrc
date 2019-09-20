@@ -71,6 +71,10 @@ Plugin 'jiangmiao/auto-pairs'
 Plugin 'severin-lemaignan/vim-minimap'
 Plugin 'jpalardy/vim-slime.git'
 Plugin 'ekalinin/Dockerfile.vim'
+Plugin 'godlygeek/tabular'
+Plugin 'plasticboy/vim-markdown'
+Plugin 'junegunn/vim-easy-align'
+Plugin 'airblade/vim-gitgutter'
 " Plugin 'szymonmaszke/vimpyter'
 
 call vundle#end()            " required
@@ -79,10 +83,9 @@ filetype plugin indent on    " required
 
 let g:airline#extensions#bufferline#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
-
 let mapleader=" "
 nmap <Leader>b :CtrlPBuffer<CR>
-nmap <Leader>l : CtrlPLine<CR>
+nmap <Leader>l :CtrlPLine %<CR>
 let g:ctrlp_map = '<c-k>'
 let g:ctrlp_extensions = ['buffertag', 'tag', 'line', 'dir']
 
@@ -98,9 +101,11 @@ let g:airline#extensions#tabline#buffer_idx_mode = 1
 
 let g:ycm_autoclose_preview_window_after_insertion = 1
 let g:ycm_autoclose_preview_window_after_completion = 1
-
+let g:ycm_add_preview_to_completeopt = 0
+let g:ycm_server_python_interpreter = '/n/w1-knguyen/anaconda2/install/envs/py36/bin/python'
 " let g:ycm_server_keep_logfiles = 1
 " let g:ycm_server_log_level = 'debug'
+" set completeopt-=preview
 let g:ycm_semantic_completion_toggle = '<c-q>'
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
@@ -117,11 +122,21 @@ set nu rnu
 colorscheme palenight
 set cursorline
 set timeoutlen=1000 ttimeoutlen=0
-" set foldmethod=syntax
+set foldmethod=syntax
 set sidescroll=1
-let g:slime_target = "vimterminal"
+let g:slime_target = "tmux"
 " let g:slime_python_ipython
 let g:slime_python_ipython = 1
 " let g:slime_paste_file = "$HOME/.slime_paste"
 " " guibg=lightgrey guifg=blue
 hi Terminal ctermbg=Black ctermfg=White
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
+" Align GitHub-flavored Markdown tables
+au FileType markdown vmap <Leader><Bslash> :EasyAlign*<Bar><Enter>
+
+let g:ycm_global_ycm_extra_conf = "/home/knguyen/.vim/ycm_extra_conf.py""
+au BufRead,BufNewFile *.wsgi set filetype=python
