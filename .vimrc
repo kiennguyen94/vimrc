@@ -47,8 +47,6 @@ filetype off                  " required
 " inoremap {;<CR> {<CR>};<ESC>O
 " end Auto bracketing
 
-:nnoremap <C-n> :bnext<CR>
-:nnoremap <C-p> :bprevious<CR>
 nnoremap gb :ls<CR>:b<Space>
 
 
@@ -61,7 +59,9 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
-Plugin 'Valloric/YouCompleteMe'
+Plugin 'preservim/nerdcommenter'
+Plugin 'neoclide/coc.nvim'
+" Plugin 'Valloric/YouCompleteMe'
 " Plugin 'flazz/vim-colorschemes'
 Plugin 'vim-airline/vim-airline' 
 Plugin 'bling/vim-bufferline'
@@ -74,22 +74,50 @@ Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
 Plugin 'junegunn/vim-easy-align'
+Plugin 'chrisbra/csv.vim'
 Plugin 'airblade/vim-gitgutter'
-" Plugin 'szymonmaszke/vimpyter'
+Plugin 'prabirshrestha/async.vim'
+Plugin 'majutsushi/tagbar'
+" Plugin 'prabirshrestha/vim-lsp'
 
 call vundle#end()            " required
 " End vundle
 filetype plugin indent on    " required
 
+let g:airline#extensions#tagbar#enabled = 1
 let g:airline#extensions#bufferline#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let mapleader=" "
 nmap <Leader>b :CtrlPBuffer<CR>
 nmap <Leader>l :CtrlPLine %<CR>
-let g:ctrlp_map = '<c-k>'
+let g:ctrlp_map = ''
 let g:ctrlp_extensions = ['buffertag', 'tag', 'line', 'dir']
 
-"set airline 
+" if executable('clangd')
+"     au User lsp_setup call lsp#register_server({
+"             \ 'name': 'clangd',
+"             \ 'cmd': {server_info->['clangd', '-background-index']},
+"             \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
+"             \ 
+"     })
+" endif
+" let g:register_server = {
+"     'name' : 'clangd',
+"     'cmd' : {server_info->['clangd', '-background-index']},
+"     'whitelist' : ['c', 'cpp', 'objc', 'objcpp'],
+" }
+" let g:lsc_server_commands = {
+"   \ 'c': 'cquery --init="{\"cacheDirectory\": \"/tmp/cquery_cache\"}"',
+"   \ 'cpp': 'cquery --init="{\"cacheDirectory\": \"/tmp/cquery_cache\"}"',
+"   \ }
+" 
+" split mapping
+set completeopt-=preview
+nnoremap <C-J> <C-W><C-J>
+nnoremap <C-K> <C-W><C-K>
+nnoremap <C-L> <C-W><C-L>
+nnoremap <C-H> <C-W><C-H>
+" set airline 
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
 let g:airline#extensions#tabline#show_tab_nr = 1
@@ -98,15 +126,51 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#fnametruncate = 16
 let g:airline#extensions#tabline#fnamecollapse = 2
 let g:airline#extensions#tabline#buffer_idx_mode = 1
+let g:airline#extensions#coc#enabled = 1
 
-let g:ycm_autoclose_preview_window_after_insertion = 1
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:ycm_add_preview_to_completeopt = 0
-let g:ycm_server_python_interpreter = '/n/w1-knguyen/anaconda2/install/envs/py36/bin/python'
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+" inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+" let g:ycm_autoclose_preview_window_after_insertion = 1
+" let g:ycm_autoclose_preview_window_after_completion = 1
+" let g:ycm_add_preview_to_completeopt = 0
+" let g:ycm_server_python_interpreter = '/n/w1-knguyen/anaconda2/install/envs/py36/bin/python'
+" let g:ycm_semantic_triggers = { 'cpp': [ 're!.' ] }
+" let g:ycm_global_ycm_extra_conf = "/home/knguyen/.vim/ycm_extra_conf.py""
+
+" Add spaces after comment delimiters by default
+let g:NERDSpaceDelims = 1
+
+" Use compact syntax for prettified multi-line comments
+let g:NERDCompactSexyComs = 1
+
+" Align line-wise comment delimiters flush left instead of following code indentation
+let g:NERDDefaultAlign = 'left'
+
+" Set a language to use its alternate delimiters by default
+let g:NERDAltDelims_java = 1
+
+" Add your own custom formats or override the defaults
+let g:NERDCustomDelimiters = { 'c': { 'left': '/**','right': '*/' } }
+
+" Allow commenting and inverting empty lines (useful when commenting a region)
+let g:NERDCommentEmptyLines = 1
+
+" Enable trimming of trailing whitespace when uncommenting
+let g:NERDTrimTrailingWhitespace = 1
+
+" Enable NERDCommenterToggle to check all selected lines is commented or not 
+let g:NERDToggleCheckAllLines = 1
 " let g:ycm_server_keep_logfiles = 1
 " let g:ycm_server_log_level = 'debug'
 " set completeopt-=preview
-let g:ycm_semantic_completion_toggle = '<c-q>'
+" let g:ycm_semantic_completion_toggle = '<c-q>'
 nmap <leader>1 <Plug>AirlineSelectTab1
 nmap <leader>2 <Plug>AirlineSelectTab2
 nmap <leader>3 <Plug>AirlineSelectTab3
@@ -120,7 +184,6 @@ nmap <leader>9 <Plug>AirlineSelectTab9
 set number relativenumber
 set nu rnu
 colorscheme palenight
-set cursorline
 set timeoutlen=1000 ttimeoutlen=0
 set foldmethod=syntax
 set sidescroll=1
@@ -138,5 +201,112 @@ nmap ga <Plug>(EasyAlign)
 " Align GitHub-flavored Markdown tables
 au FileType markdown vmap <Leader><Bslash> :EasyAlign*<Bar><Enter>
 
-let g:ycm_global_ycm_extra_conf = "/home/knguyen/.vim/ycm_extra_conf.py""
 au BufRead,BufNewFile *.wsgi set filetype=python
+
+:nnoremap <C-n> :bnext<CR>
+:nnoremap <C-p> :bprevious<CR>
+set cursorcolumn
+set cursorline
+" :autocmd InsertEnter,InsertLeave * set cul!
+" :autocmd InsertEnter * set cul
+" :autocmd InsertLeave * set nocul
+let &t_SI = "\e[3 q"
+let &t_EI = "\e[6 q"
+" if exists('$TMUX')
+"     let &t_SI = "\<Esc>Ptmux;\<Esc>\e[5 q\<Esc>\\"
+"     let &t_EI = "\<Esc>Ptmux;\<Esc>\e[2 q\<Esc>\\"
+" else
+"     let &t_SI = "\e[5 q"
+"     let &t_EI = "\e[2 q"
+" endif
+" set
+" set statusline^=%{get(g:,'coc_git_status','')}%{get(b:,'coc_git_status','')}%{get(b:,'coc_git_blame','')}
+" noremap <leader>x :!git blame % > %.blame<CR>:vsplit %.blame<CR>
+
+command! -nargs=* Blame call s:GitBlame()
+
+function! s:GitBlame()
+   let cmdline = "git blame -w " . bufname("%")
+   let nline = line(".") + 1
+   vertical rightb new
+   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+   execute "$read !" . cmdline
+   setlocal nomodifiable
+   execute "normal " . nline . "gg"
+   execute "set filetype=rst"
+endfunction
+
+"======================================================
+" function runs git show on report of git blame;
+" the first token of a line is taken as SHA checsum of the 
+" git commit
+"======================================================
+command! -nargs=* GShow call s:GitShowFromBlame()
+
+function! s:GitShowFromBlame()
+   let curline = getline( "." )
+   let tokens = split(curline)
+   let cmdline = "git show  -w " . tokens[0]
+   "botright new
+   "topleft new
+   "vsplit new
+   "vnew new
+   vertical new
+   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+   execute "$read !" . cmdline
+   setlocal nomodifiable
+   execute "normal 1gg"
+   execute "set filetype=git"
+endfunction
+
+command! -nargs=* GDiff call s:GitDiff()
+
+function! s:GitDiff()
+   let cmdline = "git diff " . bufname("%")
+   let nline = line(".") + 1
+   vertical rightb new
+   setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+   execute "$read !" . cmdline
+   setlocal nomodifiable
+   execute "set filetype=git"
+endfunction
+
+
+command! -complete=shellcmd -nargs=+ Shell call s:RunShellCommand(<q-args>)
+" command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
+function! s:RunShellCommand(cmdline)
+  echo a:cmdline
+  let expanded_cmdline = a:cmdline
+  let x = a:cmdline
+  for part in split(a:cmdline, ' ')
+     if part[0] =~ '\v[%#<]'
+        let expanded_part = fnameescape(expand(part))
+        let expanded_cmdline = substitute(expanded_cmdline, part, expanded_part, '')
+     endif
+  endfor
+  vert botright new
+  setlocal buftype=nofile bufhidden=wipe nobuflisted noswapfile nowrap
+  call setline(1, 'You entered:    ' . a:cmdline)
+  call setline(2, 'Expanded Form:  ' .expanded_cmdline)
+  call setline(3,substitute(getline(2),'.','=','g'))
+  execute '$read !'. expanded_cmdline
+  " execute '$read !'. x
+  setlocal nomodifiable
+  1
+endfunction
+
+
+" function! s:ExecuteInShell(command)
+"   let command = join(map(split(a:command), 'expand(v:val)'))
+"   let winnr = bufwinnr('^' . command . '$')
+"   silent! execute  winnr < 0 ? 'botright new ' . fnameescape(command) : winnr . 'wincmd w'
+"   setlocal buftype=nowrite bufhidden=wipe nobuflisted noswapfile nowrap number
+"   echo 'Execute ' . command . '...'
+"   silent! execute 'silent %!'. command
+"   silent! execute 'resize ' . line('$')
+"   silent! redraw
+"   silent! execute 'au BufUnload <buffer> execute bufwinnr(' . bufnr('#') . ') . ''wincmd w'''
+"   silent! execute 'nnoremap <silent> <buffer> <LocalLeader>r :call <SID>ExecuteInShell(''' . command . ''')<CR>'
+"   echo 'Shell command ' . command . ' executed.'
+" endfunction
+" command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
