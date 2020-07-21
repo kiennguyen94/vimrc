@@ -5,7 +5,6 @@ set smartcase
 set hlsearch
 set mouse=
 syntax on
-colorscheme desert
 vnoremap // y/<C-R>"<CR>
 
 set expandtab           " enter spaces when tab is pressed
@@ -13,6 +12,7 @@ set tabstop=4           " use 4 spaces to represent tab
 set softtabstop=4
 set shiftwidth=4        " number of spaces to use for auto indent
 set autoindent          " copy indent from current line when starting a new line
+set smartindent
 set hidden
 set textwidth=0 wrapmargin=0
 
@@ -50,7 +50,7 @@ filetype off                  " required
 nnoremap gb :ls<CR>:b<Space>
 
 
-" Vundle 
+" Vundle
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 " alternatively, pass a path where Vundle should install plugins
@@ -61,9 +61,9 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'preservim/nerdcommenter'
 Plugin 'neoclide/coc.nvim'
+Plugin 'Rykka/InstantRst'
 " Plugin 'Valloric/YouCompleteMe'
-" Plugin 'flazz/vim-colorschemes'
-Plugin 'vim-airline/vim-airline' 
+Plugin 'vim-airline/vim-airline'
 Plugin 'bling/vim-bufferline'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'drewtempelmeyer/palenight.vim'
@@ -78,6 +78,7 @@ Plugin 'chrisbra/csv.vim'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'prabirshrestha/async.vim'
 Plugin 'majutsushi/tagbar'
+Plugin 'tmhedberg/SimpylFold'
 " Plugin 'prabirshrestha/vim-lsp'
 
 call vundle#end()            " required
@@ -91,14 +92,16 @@ let mapleader=" "
 nmap <Leader>b :CtrlPBuffer<CR>
 nmap <Leader>l :CtrlPLine %<CR>
 let g:ctrlp_map = ''
+let g:ctrlp_max_files=0
 let g:ctrlp_extensions = ['buffertag', 'tag', 'line', 'dir']
 
+:let g:csv_delim='%'
 " if executable('clangd')
 "     au User lsp_setup call lsp#register_server({
 "             \ 'name': 'clangd',
 "             \ 'cmd': {server_info->['clangd', '-background-index']},
 "             \ 'whitelist': ['c', 'cpp', 'objc', 'objcpp'],
-"             \ 
+"             \
 "     })
 " endif
 " let g:register_server = {
@@ -110,14 +113,14 @@ let g:ctrlp_extensions = ['buffertag', 'tag', 'line', 'dir']
 "   \ 'c': 'cquery --init="{\"cacheDirectory\": \"/tmp/cquery_cache\"}"',
 "   \ 'cpp': 'cquery --init="{\"cacheDirectory\": \"/tmp/cquery_cache\"}"',
 "   \ }
-" 
+"
 " split mapping
 set completeopt-=preview
 nnoremap <C-J> <C-W><C-J>
 nnoremap <C-K> <C-W><C-K>
 nnoremap <C-L> <C-W><C-L>
 nnoremap <C-H> <C-W><C-H>
-" set airline 
+" set airline
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
 let g:airline#extensions#tabline#show_tab_nr = 1
@@ -165,7 +168,7 @@ let g:NERDCommentEmptyLines = 1
 " Enable trimming of trailing whitespace when uncommenting
 let g:NERDTrimTrailingWhitespace = 1
 
-" Enable NERDCommenterToggle to check all selected lines is commented or not 
+" Enable NERDCommenterToggle to check all selected lines is commented or not
 let g:NERDToggleCheckAllLines = 1
 " let g:ycm_server_keep_logfiles = 1
 " let g:ycm_server_log_level = 'debug'
@@ -180,9 +183,14 @@ nmap <leader>6 <Plug>AirlineSelectTab6
 nmap <leader>7 <Plug>AirlineSelectTab7
 nmap <leader>8 <Plug>AirlineSelectTab8
 nmap <leader>9 <Plug>AirlineSelectTab9
+noremap <Leader>s :update<CR>
 
 set number relativenumber
 set nu rnu
+autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
+au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+au InsertLeave * match ExtraWhitespace /\s\+$/
+autocmd BufWinEnter * match ExtraWhitespace /^\s* \s*\|\s\+$/
 colorscheme palenight
 set timeoutlen=1000 ttimeoutlen=0
 set foldmethod=syntax
@@ -190,7 +198,7 @@ set sidescroll=1
 let g:slime_target = "tmux"
 " let g:slime_python_ipython
 let g:slime_python_ipython = 1
-" let g:slime_paste_file = "$HOME/.slime_paste"
+let g:slime_paste_file = "$HOME/.slime_paste"
 " " guibg=lightgrey guifg=blue
 hi Terminal ctermbg=Black ctermfg=White
 " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -210,8 +218,10 @@ set cursorline
 " :autocmd InsertEnter,InsertLeave * set cul!
 " :autocmd InsertEnter * set cul
 " :autocmd InsertLeave * set nocul
-let &t_SI = "\e[3 q"
-let &t_EI = "\e[6 q"
+" let &t_SI = "\e[3 q"
+" let &t_EI = "\e[5 q"
+let &t_SI = "\e[5 q"
+let &t_EI = "\e[1 q"
 " if exists('$TMUX')
 "     let &t_SI = "\<Esc>Ptmux;\<Esc>\e[5 q\<Esc>\\"
 "     let &t_EI = "\<Esc>Ptmux;\<Esc>\e[2 q\<Esc>\\"
@@ -238,7 +248,7 @@ endfunction
 
 "======================================================
 " function runs git show on report of git blame;
-" the first token of a line is taken as SHA checsum of the 
+" the first token of a line is taken as SHA checsum of the
 " git commit
 "======================================================
 command! -nargs=* GShow call s:GitShowFromBlame()
@@ -295,6 +305,12 @@ function! s:RunShellCommand(cmdline)
   1
 endfunction
 
+command! Vb normal! <C-v>
+
+:cnoremap <C-K> <Up>
+:cnoremap <C-J> <Down>
+:cnoremap <C-H> <Left>
+:cnoremap <C-L> <Right>
 
 " function! s:ExecuteInShell(command)
 "   let command = join(map(split(a:command), 'expand(v:val)'))
