@@ -190,7 +190,7 @@ set nu rnu
 autocmd ColorScheme * highlight ExtraWhitespace ctermbg=red guibg=red
 au InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 au InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinEnter * match ExtraWhitespace /^\s* \s*\|\s\+$/
+" autocmd BufWinEnter * match ExtraWhitespace /^\s* \s*\|\s\+$/
 colorscheme palenight
 set timeoutlen=1000 ttimeoutlen=0
 set foldmethod=syntax
