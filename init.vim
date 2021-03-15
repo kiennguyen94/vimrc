@@ -1,5 +1,5 @@
-set runtimepath^=~/.vim runtimepath+=~/.vim/after
-let &packpath = &runtimepath
+" set runtimepath^=~/.vim runtimepath+=~/.vim/after
+" let &packpath = &runtimepath
 set encoding=utf-8
 " source $VIMRUNTIME/vimrc_example.vim
 set ignorecase
@@ -62,6 +62,7 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 Plugin 'scrooloose/nerdtree'
+" Plugin 'liuchengxu/eleline.vim'
 Plugin 'preservim/nerdcommenter'
 Plugin 'neoclide/coc.nvim'
 Plugin 'Rykka/InstantRst'
@@ -79,19 +80,16 @@ Plugin 'plasticboy/vim-markdown'
 Plugin 'junegunn/vim-easy-align'
 Plugin 'chrisbra/csv.vim'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'prabirshrestha/async.vim'
+" Plugin 'prabirshrestha/async.vim'
 Plugin 'majutsushi/tagbar'
 Plugin 'tmhedberg/SimpylFold'
 Plugin 'mtdl9/vim-log-highlighting'
 " Plugin 'prabirshrestha/vim-lsp'
-
 call vundle#end()            " required
 " End vundle
 filetype plugin indent on    " required
 
-let g:airline#extensions#tagbar#enabled = 1
-let g:airline#extensions#bufferline#enabled = 1
-let g:airline#extensions#tabline#enabled = 1
+" set laststatus=2
 let mapleader=" "
 nmap <Leader>b :CtrlPBuffer<CR>
 nmap <Leader>l :CtrlPLine %<CR>
@@ -129,6 +127,9 @@ nnoremap <C-K> <C-W>w
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
 " set airline
+let g:airline#extensions#tagbar#enabled = 1
+let g:airline#extensions#bufferline#enabled = 1
+let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#tab_nr_type = 1 " tab number
 let g:airline#extensions#tabline#show_tab_nr = 1
@@ -188,15 +189,6 @@ let g:NERDToggleCheckAllLines = 1
 " let g:ycm_server_log_level = 'debug'
 " set completeopt-=preview
 " let g:ycm_semantic_completion_toggle = '<c-q>'
-nmap <leader>1 <Plug>AirlineSelectTab1
-nmap <leader>2 <Plug>AirlineSelectTab2
-nmap <leader>3 <Plug>AirlineSelectTab3
-nmap <leader>4 <Plug>AirlineSelectTab4
-nmap <leader>5 <Plug>AirlineSelectTab5
-nmap <leader>6 <Plug>AirlineSelectTab6
-nmap <leader>7 <Plug>AirlineSelectTab7
-nmap <leader>8 <Plug>AirlineSelectTab8
-nmap <leader>9 <Plug>AirlineSelectTab9
 noremap <Leader>s :update<CR>
 
 set number relativenumber
@@ -207,7 +199,6 @@ au InsertLeave * match ExtraWhitespace /\s\+$/
 " autocmd BufWinEnter * match ExtraWhitespace /^\s* \s*\|\s\+$/
 colorscheme palenight
 set timeoutlen=1000 ttimeoutlen=0
-set foldmethod=syntax
 set sidescroll=1
 let g:slime_target = "tmux"
 " let g:slime_python_ipython
@@ -325,10 +316,15 @@ command! Vb normal! <C-v>
 :cnoremap <C-J> <Down>
 :cnoremap <C-H> <Left>
 :cnoremap <C-L> <Right>
+nnoremap <C-e> 5<C-e>
+nnoremap <C-y> 5<C-y>
+
 
 :nnoremap <expr> <f2> &foldlevel ? 'zM' :'zR'
 autocmd InsertEnter * if !exists('w:last_fdm') | let w:last_fdm=&foldmethod | setlocal foldmethod=manual | endif
 autocmd InsertLeave,WinLeave * if exists('w:last_fdm') | let &l:foldmethod=w:last_fdm | unlet w:last_fdm | endif
+
+set foldmethod=indent
 
 let i = 1
 while i <= 9
@@ -350,3 +346,7 @@ endwhile
 "   echo 'Shell command ' . command . ' executed.'
 " endfunction
 " command! -complete=shellcmd -nargs=+ Shell call s:ExecuteInShell(<q-args>)
+if has("autocmd")
+  au BufReadPost * if line("'\"") > 1 && line("'\"") <= line("$") | exe "normal! g'\"" | endif
+endif
+
