@@ -9,6 +9,9 @@ set mouse=i
 syntax on
 vnoremap // y/<C-R>"<CR>
 
+set backupdir=.,~/tmp,~/
+set directory=.,~/tmp,/var/tmp,/tmp
+set undodir=.
 set expandtab           " enter spaces when tab is pressed
 set tabstop=4           " use 4 spaces to represent tab
 set softtabstop=4
@@ -71,13 +74,13 @@ Plugin 'vim-airline/vim-airline'
 Plugin 'bling/vim-bufferline'
 Plugin 'ctrlpvim/ctrlp.vim'
 Plugin 'drewtempelmeyer/palenight.vim'
-Plugin 'jiangmiao/auto-pairs'
-Plugin 'severin-lemaignan/vim-minimap'
+" Plugin 'jiangmiao/auto-pairs'
+" Plugin 'severin-lemaignan/vim-minimap'
 Plugin 'jpalardy/vim-slime.git'
 Plugin 'ekalinin/Dockerfile.vim'
 Plugin 'godlygeek/tabular'
 Plugin 'plasticboy/vim-markdown'
-Plugin 'junegunn/vim-easy-align'
+" Plugin 'junegunn/vim-easy-align'
 Plugin 'chrisbra/csv.vim'
 Plugin 'airblade/vim-gitgutter'
 " Plugin 'prabirshrestha/async.vim'
@@ -126,6 +129,8 @@ nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>w
 nnoremap <C-L> <C-W>l
 nnoremap <C-H> <C-W>h
+set list
+set listchars=tab:▷⋅,trail:⋅,nbsp:⋅
 " set airline
 let g:airline#extensions#tagbar#enabled = 1
 let g:airline#extensions#bufferline#enabled = 1
@@ -139,7 +144,8 @@ let g:airline#extensions#tabline#fnametruncate = 16
 let g:airline#extensions#tabline#fnamecollapse = 2
 let g:airline#extensions#tabline#buffer_idx_mode = 1
 let g:airline#extensions#coc#enabled = 1
-let g:coc_disable_startup_warning = 1
+" let g:airline#extensions#whitespace#enabled = 0
+let g:coc_disable_startup_warning = 0
 
 " inoremap <silent><expr> <TAB>
 "       \ pumvisible() ? "\<C-n>" :
@@ -152,6 +158,27 @@ nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 nmap <leader>rn <Plug>(coc-rename)
 
+" nnoremap <silent><nowait><expr> <C-J> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-F>"
+" nnoremap <silent><nowait><expr> <C-K> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-B>"
+" inoremap <silent><nowait><expr> <C-J> coc#float#has_scroll() ? "\<C-R>=coc#float#scroll(1)\<CR>" : "\<Right>"
+" inoremap <silent><nowait><expr> <C-K> coc#float#has_scroll() ? "\<C-R>=coc#float#scroll(0)\<CR>" : "\<Left>"
+" vnoremap <silent><nowait><expr> <C-J> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-F>"
+" vnoremap <silent><nowait><expr> <C-K> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-B>"
+"
+  function! s:check_back_space() abort
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+  endfunction
+
+  " Insert <tab> when previous text is space, refresh completion if not.
+  inoremap <silent><expr> <TAB>
+        \ coc#pum#visible() ? coc#pum#next(1):
+        \ <SID>check_back_space() ? "\<Tab>" :
+        \ coc#refresh()
+  inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+  inoremap <silent><expr> <CR> coc#pum#visible() ? coc#_select_confirm()
+                                \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 " Formatting selected code.
 xmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
@@ -351,3 +378,5 @@ if has("autocmd")
 endif
 
 set undofile
+set exrc
+set secure
